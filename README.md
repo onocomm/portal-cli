@@ -10,15 +10,22 @@ Consoleの管理機能、任意GraphQL、DynamoDB直接操作、契約変更・�
 
 ## 現在の提供状況
 
-- CLIソース、設定、テスト、利用ガイドを公開しています。npmレジストリへの公開は行っていません。
+- CLIソース、設定、テスト、利用ガイドとGitHub Releasesのビルド済みパッケージを公開しています。npmレジストリへの公開は行っていません。
 - 本番Portalの公開クライアント設定を既定値として使用します。秘密鍵・client secret・AWS管理者認証は含みません。
-- **ブラウザログインに必要な`http://127.0.0.1:19878/callback`の本番登録は未反映です。** 共通認証基盤側の変更を準備しています。反映前はブラウザログインが`redirect_mismatch`になります。
+- ブラウザログイン用の`http://127.0.0.1:19878/callback`は、2026-11-05に本番・developの共通認証基盤へ登録済みです。既存Webログイン・他サービスの設定は変更していません。
 - メールOTPは既存の許可フローを利用する代替方式です。MFA設定や外部IdPなどにより利用できないアカウントがあります。
-- 実ユーザーでのブラウザ・OTP認証、実顧客データの参照は、受入確認が必要です。自動テストだけで実環境の動作完了とは扱いません。
+- 本番・developで本人のブラウザ認証とPortal APIへの`auth me`を実接続確認しました。developではトークン更新・CLIログアウトも確認済みです。メールOTP、全36操作、実アカウント間の拒否試験は別途受入対象です。
 
 ## インストール
 
-Node.js 22.12以上とnpm、Gitが必要です。
+Node.js 22.12以上とnpmが必要です。GitHub Releasesのビルド済みパッケージをインストールします。
+
+```bash
+npm install -g --ignore-scripts https://github.com/onocomm/portal-cli/releases/download/v0.1.0/onocomm-portal-cli-0.1.0.tgz
+onocomm-portal --version
+```
+
+ソースから開発する場合はGitも必要です。
 
 ```bash
 git clone https://github.com/onocomm/portal-cli.git
@@ -29,11 +36,10 @@ npm link
 onocomm-portal --help
 ```
 
-初版では上記のclone・ビルド方式をサポートします。Git URLを指定するnpmの直接インストールは未対応です。
+Git URLを指定するnpmの直接インストールは未対応です。配布アーカイブまたはclone・ビルド方式を使用してください。
 
 ## クイックスタート
 
-ブラウザ認証はcallback登録の反映後に使用できます。
 CLIがブラウザを開き、共通ログイン画面で本人が認証します。
 パスキー、メールコード、Googleなどの選択肢は共通認証基盤と本人の設定に従います。
 

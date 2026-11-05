@@ -11,7 +11,7 @@ CLIは`127.0.0.1`の19878番ポートだけでcallbackを受け、認可コー�
 トークンをURLへ付けてブラウザからCLIへ転送する方式ではありません。
 JWTの署名、issuer、audience、token_use、期限、利用者sub、nonceを検証します。
 
-共通認証基盤へのcallback登録が反映されるまでは使えません。
+標準callbackは2026-11-05に本番・developの既存Portalクライアントへ登録済みです。
 CLIからCognitoクライアントや認証ポリシーを変更する機能はありません。
 `redirect_mismatch`を認証の無効化や別クライアントへのすり替えで回避しないでください。
 
