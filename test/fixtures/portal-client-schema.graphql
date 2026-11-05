@@ -1,0 +1,452 @@
+# Minimal public client contract for the 36 catalog queries.
+# Field, argument and type signatures match the Portal schema.
+# Unused fields, impersonation arguments and server-only definitions are omitted.
+
+scalar AWSJSON
+
+type Query {
+  getAuthUser: AuthUser
+  getAWS(account_no: String!): AWS
+  getBill(bill_no: String!): Bill
+  getCustomer(customer_no: String!): Customer
+  getDomain(domain_name: String!): Domain
+  getInvoice(invoice_no: String!): Invoice
+  getMail(domain_name: String!): Mail
+  getNS53(ns53_no: String!): NS53
+  getOnocommMembers(contract_no: String!): OnocommMembers
+  getOrder(order_no: String!): Order
+  getQuotation(quotation_no: String!): Quotation
+  getServer(server_no: String!): Server
+  getServerless(system_name: String!): Serverless
+  getSSL(ssl_name: String!): SSL
+  getStorage(storage_id: String!): Storage
+  getSupportCase(case_id: String!): SupportCase
+  getSupportCaseByNumber(case_number: String!): SupportCase
+  getWorkReport(reportId: String!): WorkReport
+  queryAnnouncement(limit: Int, nextToken: String): AnnouncementConnection
+  queryInvoice(invoice_flag: String!, start_date: Int!, end_date: Int!, limit: Int, nextToken: String): InvoiceConnection
+  querySupportCaseComment(case_id: String!, limit: Int, nextToken: String): SupportCaseCommentConnection
+  querySupportCaseV2(account_no: String, status: String, start_date: Int, end_date: Int, limit: Int, nextToken: String): SupportCaseConnection
+  queryWorkReport(customer_no: String!, limit: Int, nextToken: String): WorkReportConnection
+  scanAWS(limit: Int, nextToken: String): AWSConnection
+  scanBill(limit: Int, nextToken: String): BillConnection
+  scanCustomer(limit: Int, nextToken: String): CustomerConnection
+  scanDomain(limit: Int, nextToken: String): DomainConnection
+  scanMail(limit: Int, nextToken: String): MailConnection
+  scanNS53(limit: Int, nextToken: String): NS53Connection
+  scanOnocommMembers(limit: Int, nextToken: String): OnocommMembersConnection
+  scanOrder(limit: Int, nextToken: String): OrderConnection
+  scanQuotation(limit: Int, nextToken: String): QuotationConnection
+  scanServer(limit: Int, nextToken: String): ServerConnection
+  scanServerless(limit: Int, nextToken: String): ServerlessConnection
+  scanSSL(limit: Int, nextToken: String): SSLConnection
+  scanStorage(limit: Int, nextToken: String): StorageConnection
+}
+
+type Announcement {
+  announcement_id: String
+  close_at: Int
+  content: String
+  date_edit: Int
+  is_modal: Boolean
+  is_top_page: Boolean
+  open_at: Int
+  status: String
+  title: String
+}
+
+type AnnouncementConnection {
+  items: [Announcement]
+  nextToken: String
+}
+
+type AuthUser {
+  admin_flag: Boolean
+  customer_group: AWSJSON
+  customer_name: String
+  customer_no: String
+  email: String
+  status: String
+  user_id: String!
+  user_name: String
+}
+
+type AWS {
+  account_name: String
+  account_no: String!
+  aws_discount: [AWSDiscount]
+  aws_support: [AWSSupportDetails]
+  contract_date: Int
+  customer_name: String
+  customer_no: String
+  organization_flag: String
+  payment_service: String
+  status: String
+}
+
+type AWSConnection {
+  items: [AWS]
+  nextToken: String
+}
+
+type AWSDiscount {
+  percent: String
+  status: String
+}
+
+type AWSSupportDetails {
+  contract_date: Int
+  price_notax: Int
+  status: String
+  support_name: String
+}
+
+type Bill {
+  bill_end: Int
+  bill_no: String
+  bill_start: Int
+  contract_date: Int
+  customer_name: String
+  customer_no: String
+  details: [BillDetails]
+  status: String
+  title: String
+  total_price_notax: Int
+}
+
+type BillConnection {
+  items: [Bill]
+  nextToken: String
+}
+
+type BillDetails {
+  details: String
+  piece: Int
+  piece_type: String
+  price_notax: Int
+  sort: Int
+  sub_price_notax: Int
+}
+
+type Customer {
+  contract_kbn: String
+  customer_name: String
+  customer_name_en: String
+  customer_name_furi: String
+  customer_no: String!
+  invoice_mail_flag: String
+  invoice_pay_kbn: String
+  person_mail: String
+  person_name: String
+  person_section: String
+  tech_mail: String
+  tech_name: String
+}
+
+type CustomerConnection {
+  items: [Customer]
+  nextToken: String
+}
+
+type Domain {
+  bill_end: String
+  bill_start: String
+  billing_date: Int
+  contract_years: Int
+  customer_name: String
+  customer_no: String
+  domain_kbn: String
+  domain_name: String!
+  expiration: Int
+  nameserver: [String]
+  price_notax: Int
+  status: String
+}
+
+type DomainConnection {
+  items: [Domain]
+  nextToken: String
+}
+
+type Invoice {
+  customer_name: String
+  customer_no: String
+  date_invoice: Int
+  date_payment: Int
+  details: [InvoiceDetails]
+  eligible_invoice: String
+  invoice_flag: String
+  invoice_no: String
+  pay_kbn: String
+  total_price: Int
+  total_price_notax: Int
+  total_tax: Int
+}
+
+type InvoiceConnection {
+  items: [Invoice]
+  nextToken: String
+}
+
+type InvoiceDetails {
+  details: String
+  piece: Int
+  piece_type: String
+  price_notax: Int
+  sort: Int
+  sub_price_notax: Int
+  tax: String
+  tax_per: String
+}
+
+type Mail {
+  contract_date: Int
+  contract_type: String
+  customer_name: String
+  customer_no: String
+  disk: Int
+  disk_free: Int
+  disk_per: Int
+  disk_use: Int
+  domain_name: String!
+  hosting_platform: String
+  hostname: String
+  mail_host_sync_status: String
+  price_notax: Int
+  pricing_plan: String
+  status: String
+}
+
+type MailConnection {
+  items: [Mail]
+  nextToken: String
+}
+
+type NS53 {
+  bill_end: Int
+  bill_start: Int
+  contract_date: Int
+  customer_name: String
+  customer_no: String
+  domain_num: Int
+  ns53_no: String
+  price_notax: Int
+  record_num: Int
+  status: String
+  title: String
+}
+
+type NS53Connection {
+  items: [NS53]
+  nextToken: String
+}
+
+type OnocommMembers {
+  aws_discount_rate: Int
+  contract_date: Int
+  contract_end_date: Int
+  contract_no: String!
+  customer_name: String
+  customer_no: String
+  free_trial_end_date: Int
+  meeting_type: String
+  plan: String
+  poc_support_type: String
+  portal_user_limit: Int
+  price_notax: Int
+  qa_monthly_limit: Int
+  status: String
+  work_support_hours: Int
+}
+
+type OnocommMembersConnection {
+  items: [OnocommMembers]
+  nextToken: String
+}
+
+type Order {
+  customer_name: String
+  customer_no: String
+  date_order: Int
+  i_total_price: Int
+  i_total_price_notax: Int
+  m_total_price: Int
+  m_total_price_notax: Int
+  order_no: String
+  target: String
+  target_no: String
+  title: String
+}
+
+type OrderConnection {
+  items: [Order]
+  nextToken: String
+}
+
+type Quotation {
+  customer_name: String
+  customer_no: String
+  date_limit: Int
+  date_quotation: Int
+  details: [QuotationDetails]
+  i_total_price: Int
+  i_total_price_notax: Int
+  m_total_price: Int
+  m_total_price_notax: Int
+  quotation_no: String
+  title: String
+}
+
+type QuotationConnection {
+  items: [Quotation]
+  nextToken: String
+}
+
+type QuotationDetails {
+  details: String
+  i_price_notax: Int
+  m_price_notax: Int
+  piece: Int
+  piece_type: String
+  sort: Int
+}
+
+type Server {
+  account_no: String
+  contract_date: Int
+  customer_name: String
+  customer_no: String
+  fqdn: String
+  instance_id: String
+  instance_type: String
+  ip: String
+  os: String
+  server_name: String
+  server_no: String!
+  server_type: String
+  status: String
+  total_price_notax: Int
+}
+
+type ServerConnection {
+  items: [Server]
+  nextToken: String
+}
+
+type Serverless {
+  bill_cycle: String
+  bill_end: Int
+  bill_start: Int
+  contract_date: Int
+  customer_name: String
+  customer_no: String
+  disk_num: String
+  price_notax: String
+  status: String
+  system_name: String!
+  system_name_full: String
+}
+
+type ServerlessConnection {
+  items: [Serverless]
+  nextToken: String
+}
+
+type SSL {
+  acme_auto_renew: String
+  acme_migration_status: String
+  contract_months: Int
+  customer_name: String
+  customer_no: String
+  expiration: Int
+  price_notax: Int
+  setup_date: Int
+  ssl_kbn: String
+  ssl_name: String!
+  status: String
+  target_server: String
+  target_type: String
+}
+
+type SSLConnection {
+  items: [SSL]
+  nextToken: String
+}
+
+type Storage {
+  contract_date: Int
+  customer_name: String
+  customer_no: String
+  file_num_limit: Int
+  file_num_use: Int
+  file_size_limit: Int
+  file_size_use: Int
+  price_notax: Int
+  read_only: Boolean
+  status: String
+  storage_id: String
+  title: String
+}
+
+type StorageConnection {
+  items: [Storage]
+  nextToken: String
+}
+
+type SupportCase {
+  account_no: String
+  case_id: String
+  case_number: String
+  customer_no: String
+  date_add: Int
+  date_edit: Int
+  revision: Int
+  status: String
+  subject: String
+  text_value: String
+  type: String
+  user_name: String
+}
+
+type SupportCaseComment {
+  account_no: String
+  ai_flag: Boolean
+  case_id: String
+  customer_no: String
+  date: Int
+  onocomm_flag: Boolean
+  text_value: String
+  user_name: String
+}
+
+type SupportCaseCommentConnection {
+  items: [SupportCaseComment]
+  nextToken: String
+}
+
+type SupportCaseConnection {
+  items: [SupportCase]
+  nextToken: String
+}
+
+type WorkReport {
+  createdAt: String
+  createdDate: String
+  customer_no: String
+  otherNotes: String
+  reportId: String!
+  reportNumber: String
+  status: String
+  updatedAt: String
+  workContent: String
+  workEndDate: String
+  workEndTime: String
+  workerName: String
+  workStartDate: String
+  workStartTime: String
+}
+
+type WorkReportConnection {
+  items: [WorkReport]
+  nextToken: String
+}

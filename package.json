@@ -1,0 +1,33 @@
+{
+  "name": "@onocomm/portal-cli",
+  "version": "0.1.0",
+  "description": "ONOCOMM Portalを人間とAIから利用するCLI",
+  "type": "module",
+  "license": "MIT",
+  "engines": { "node": ">=22.12.0" },
+  "bin": { "onocomm-portal": "dist/bin.js" },
+  "files": ["dist", "README.md", "SECURITY.md", "docs", "examples"],
+  "repository": { "type": "git", "url": "git+https://github.com/onocomm/portal-cli.git" },
+  "bugs": { "url": "https://github.com/onocomm/portal-cli/issues" },
+  "publishConfig": { "access": "public" },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.test.json --noEmit",
+    "test": "tsx --test test/*.test.ts",
+    "dev": "tsx src/bin.ts",
+    "check": "npm run build && npm run typecheck && npm test",
+    "prepack": "npm run build",
+    "prepare": "npm run build"
+  },
+  "dependencies": {
+    "@aws-crypto/sha256-js": "5.2.0",
+    "@aws-sdk/client-cognito-identity": "3.1162.0",
+    "@aws-sdk/client-cognito-identity-provider": "3.1162.0",
+    "@smithy/protocol-http": "5.6.2",
+    "@smithy/signature-v4": "5.7.5",
+    "commander": "15.0.0",
+    "graphql": "17.1.0",
+    "jose": "6.2.15"
+  },
+  "devDependencies": { "@types/node": "22.20.5", "tsx": "^4.21.0", "typescript": "7.0.2" }
+}
