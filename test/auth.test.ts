@@ -290,11 +290,14 @@ test('browserLogin: ブラウザ起動はshellなしの引数で実行し、起�
   }, { execFile: (_, __, ___, done) => { done(new Error(secret)); } }), 'AUTH_BROWSER');
 });
 
-test('browserLogin: 認証全体のtimeoutでtoken交換・署名鍵取得もabortする', async () => {
+test('browserLogin: 認証全体のtimeoutでtoken交換・署名鍵取得もabortする', async (context) => {
+  context.mock.timers.enable({ apis: ['setTimeout'] });
   for (const stage of ['token', 'jwks']) {
     let authorize!: URL;
     let signal: AbortSignal | null | undefined;
-    await rejectsSafe(() => browserLogin(config, {
+    let reached!: () => void;
+    const started = new Promise<void>((resolve) => { reached = resolve; });
+    const rejected = rejectsSafe(() => browserLogin(config, {
       openBrowser: false, timeoutMs: 30,
       onUrl: (url) => { authorize = new URL(url); }, manualCallback: async () => callback(authorize),
     }, {
@@ -303,9 +306,13 @@ test('browserLogin: 認証全体のtimeoutでtoken交換・署名鍵取得もabo
           return tokenResponse(await pair({ nonce: authorize.searchParams.get('nonce') }));
         }
         signal = init?.signal;
+        reached();
         return new Promise(() => {});
       },
     }), 'AUTH_TIMEOUT');
+    await started;
+    context.mock.timers.tick(30);
+    await rejected;
     assert.ok(signal?.aborted);
   }
 });
