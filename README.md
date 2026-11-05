@@ -29,12 +29,7 @@ npm link
 onocomm-portal --help
 ```
 
-GitHubからインストールする場合、npmが`prepare`でTypeScriptをビルドします。
-ソースと依存関係を確認してから実行してください。
-
-```bash
-npm install -g git+https://github.com/onocomm/portal-cli.git
-```
+初版では上記のclone・ビルド方式をサポートします。Git URLを指定するnpmの直接インストールは未対応です。
 
 ## クイックスタート
 

@@ -3,6 +3,7 @@ import * as fs from 'node:fs/promises';
 import { homedir } from 'node:os';
 import * as path from 'node:path';
 import { randomBytes } from 'node:crypto';
+import { setTimeout as delay } from 'node:timers/promises';
 import { CliError } from './types.js';
 
 const noFollow = constants.O_NOFOLLOW ?? 0;
@@ -60,7 +61,15 @@ export class FileStore {
       const handle = await fs.open(temp, constants.O_CREAT | constants.O_EXCL | constants.O_WRONLY | noFollow, 0o600);
       try { await handle.writeFile(JSON.stringify(value), 'utf8'); await handle.sync(); }
       finally { await handle.close(); }
-      await fs.rename(temp, destination);
+      for (let attempt = 0; ; attempt++) {
+        try { await fs.rename(temp, destination); break; }
+        catch (error) {
+          const code = (error as NodeJS.ErrnoException).code;
+          if (process.platform !== 'win32' || !['EPERM', 'EBUSY', 'EACCES'].includes(code ?? '') || attempt >= 8) throw error;
+          // Windows can briefly lock a destination during concurrent reads/renames.
+          await delay(Math.min(10 * 2 ** attempt, 100));
+        }
+      }
     } finally { await fs.unlink(temp).catch(() => undefined); }
   }
 
